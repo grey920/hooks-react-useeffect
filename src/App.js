@@ -1,26 +1,72 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import styled, { createGlobalStyle } from 'styled-components';
+import axios from 'axios';
 
 function App() {
+  const [posts, setPosts] = useState([]);// 빈 배열로 초기화 //posts에는 배열이 저장된다. 
+  useEffect(() => {
+    axios //axios를 통해 HTTP요청을 보내는 코드 -> 컴포넌트가 렌더링될 때마다 useEffect가 실행된다.
+      .get("https://jsonplaceholder.typicode.com/posts")
+      .then(({ data }) => setPosts(data)); //then()에서 HTTP요청을 통해 받아온 데이터를 처리한다
+  }, []); //({data})는 es6의 Destructing문법이다. 받아온 response객체 안에 있는 data배열을 바로 참조할 수 있음
+  //useEffect()의 두번째 인자로 배열을 전달 -> 랜더링시 배열 내의 요소가 변화될떄에만 usdEffect를 실행한다. 
+  //현재 빈 배열([])을 전달했기에 변화를 감지할만한 요소 자체가 없으므로 useEffect는 최초 렌더링 시에 한번만 실행되는 것이 보장된다. -> 안하면 무한렌더링
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <GlobalStyle />
+      {posts.map((post, index) => (
+        <Post key={index}>
+          <Title>{post.title}</Title>
+          <Body>{post.body}</Body>
+        </Post>
+      ))}
+
+    </Container>
   );
 }
+
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+  }
+`;
+
+const Container = styled.div`
+  min-height: 100vh;
+  padding: 200px 0;
+  display: grid;
+  grid-template-columns: repeat(4, 300px);
+  grid-template-rows: repeat(auto-fit, 300px);
+  grid-auto-rows: 300px;
+  grid-gap: 30px 20px;
+  justify-content: center;
+  background: #55efc4;
+  box-sizing: border-box;
+`;
+
+const Post = styled.div`
+  border: 1px solid black;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 10px 5px 5px #7f8fa6;
+`;
+
+const Title = styled.div`
+  height: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid black;
+  font-weight: 600;
+`;
+
+const Body = styled.div`
+  height: 80%;
+  padding: 11px;
+  border-radius: 20px;
+`;
+
 
 export default App;
