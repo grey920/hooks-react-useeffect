@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import Movie from './Movie.css';
+import './App.css';
 import axios from 'axios';
+import Movie from './Movie';
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -14,13 +15,13 @@ function App() {
       });
   }, []);
 
-  // const [posts, setPosts] = useState({ movies: [] });// 빈 배열로 초기화 //posts에는 배열이 저장된다. 
+  // const [movies, setmovies] = useState({ movies: [] });// 빈 배열로 초기화 //movies에는 배열이 저장된다. 
   // useEffect(() => {
   //   axios //axios를 통해 HTTP요청을 보내는 코드 -> 컴포넌트가 렌더링될 때마다 useEffect가 실행된다.
   //     .get("https://yts.mx/api/v2/list_movies.json")
   //     .then(res => {
   //       console.log(res.data);
-  //       setPosts(res.data);
+  //       setmovies(res.data);
   //     }); //then()에서 HTTP요청을 통해 받아온 데이터를 처리한다
 
   // }, []); //({data})는 es6의 Destructing문법이다. 받아온 response객체 안에 있는 data배열을 바로 참조할 수 있음
@@ -32,14 +33,8 @@ function App() {
       <h1>BEST MOVIE LIST</h1>
       <p>The best movies get rating over 8</p>
       <div className="Container">
-        {movies.map((post, index) => (
-          <div className="post" key={index}>
-            <div className="img-wrapper">
-              <img src={post.medium_cover_image} />
-            </div>
-            <div className="title">{post.title}</div >
-            <div className="summary">{post.summary}</div>
-          </div >
+        {movies.map((movie, index) => (
+          <Movie key={index} title={movie.title} summary={movie.summary} poster={movie.medium_cover_image} />
         ))}
 
       </div >
@@ -49,4 +44,4 @@ function App() {
 
 
 
-//export default App;
+export default App;

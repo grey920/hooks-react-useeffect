@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 
-
 const useAxios = (options, axiosInstance = axios) => {
 
 
@@ -13,6 +12,7 @@ const useAxios = (options, axiosInstance = axios) => {
         throw Error('url 누락');
 
     }
+
 
     const [state, setState] = useState({
 
@@ -25,13 +25,12 @@ const useAxios = (options, axiosInstance = axios) => {
     });
 
 
-
     useEffect(() => {
 
         axiosInstance(options)
 
             .then(data => {
-
+                console.log(data.data.data.movies);
                 setState({
 
                     ...state,
