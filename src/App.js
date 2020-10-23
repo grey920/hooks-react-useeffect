@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
+import Movie from './Movie.css';
 import axios from 'axios';
 
 function App() {
@@ -7,12 +7,10 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("https://yts.mx/api/v2/list_movies.json")
-      //    .then((res) => res.json())
+      .get("https://yts.mx/api/v2/list_movies.json?minimum_rating=8&sort_by=like_count")
       .then((res) => {
-        setMovies(res.data.data.movies);
-        console.log(res.data.data);
         console.log(res.data.data.movies);
+        setMovies(res.data.data.movies);
       });
   }, []);
 
@@ -30,61 +28,25 @@ function App() {
   //현재 빈 배열([])을 전달했기에 변화를 감지할만한 요소 자체가 없으므로 useEffect는 최초 렌더링 시에 한번만 실행되는 것이 보장된다. -> 안하면 무한렌더링
 
   return (
-    <Container>
-      <GlobalStyle />
-      {movies.map((post, index) => (
-        <Post key={index}>
-          <img src={post.small_cover_image} />
-          <Title>{post.title}</Title>
-          <Body>{post.summary}</Body>
-        </Post>
-      ))}
+    <>
+      <h1>BEST MOVIE LIST</h1>
+      <p>The best movies get rating over 8</p>
+      <div className="Container">
+        {movies.map((post, index) => (
+          <div className="post" key={index}>
+            <div className="img-wrapper">
+              <img src={post.medium_cover_image} />
+            </div>
+            <div className="title">{post.title}</div >
+            <div className="summary">{post.summary}</div>
+          </div >
+        ))}
 
-    </Container>
+      </div >
+    </>
   );
 }
 
 
-const GlobalStyle = createGlobalStyle`
-  body {
-    margin: 0;
-  }
-`;
 
-const Container = styled.div`
-  min-height: 100vh;
-  padding: 200px 0;
-  display: grid;
-  grid-template-columns: repeat(4, 300px);
-  grid-template-rows: repeat(auto-fit, 300px);
-  grid-auto-rows: 300px;
-  grid-gap: 30px 20px;
-  justify-content: center;
-  background: #55efc4;
-  box-sizing: border-box;
-`;
-
-const Post = styled.div`
-  border: 1px solid black;
-  border-radius: 20px;
-  background: white;
-  box-shadow: 10px 5px 5px #7f8fa6;
-`;
-
-const Title = styled.div`
-  height: 20%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-bottom: 1px solid black;
-  font-weight: 600;
-`;
-
-const Body = styled.div`
-  height: 80%;
-  padding: 11px;
-  border-radius: 20px;
-`;
-
-
-export default App;
+//export default App;
